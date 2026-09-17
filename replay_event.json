@@ -1,0 +1,29 @@
+{
+  "version": "0",
+  "id": "mock-event-id",
+  "detail-type": "Recourse Anomaly Detection",
+  "source": "recourse.monitoring",
+  "account": "634005656298",
+  "time": "2026-09-17T07:43:44Z",
+  "region": "ap-south-1",
+  "resources": [],
+  "detail": {
+    "event_type": "ANOMALY_DETECTED",
+    "detection_id": "DET-8D403ECC",
+    "source": "cloudwatch",
+    "alarm_name": "recourse-development-demo-processor-invocation-anomaly",
+    "alarm_state": "ALARM",
+    "service": "lambda",
+    "resource_name": "recourse-development-demo-processor",
+    "resource_type": "AWS::Lambda::Function",
+    "region": "ap-south-1",
+    "metric": "Invocations",
+    "period_seconds": 60,
+    "baseline": 39.2,
+    "observed": 140.0,
+    "deviation_ratio": 3.57,
+    "severity": "MEDIUM",
+    "detected_at": "2026-09-17T07:43:44.950+0000",
+    "event_id": "9d8f3921-b1df-8c69-4a9d-7744ab149480"
+  }
+}

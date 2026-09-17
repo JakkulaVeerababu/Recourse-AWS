@@ -1,0 +1,27 @@
+{
+  "name": "recourse",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Recourse - Autonomous AWS Resource Anomaly Investigator with Human-Approved Remediation",
+  "workspaces": [
+    "apps/*",
+    "infrastructure/*",
+    "shared/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present && npm run test:python",
+    "test:python": "pytest services/anomaly-detector",
+    "lint": "npm run lint --workspaces --if-present",
+    "format": "npm run format --workspaces --if-present",
+    "cdk:synth": "npm run cdk:synth -w @recourse/cdk",
+    "cdk:deploy:demo": "npm run cdk:deploy -w @recourse/cdk RecourseDemoWorkloadStack-development",
+    "demo:normal": "python scripts/demo_set_normal.py",
+    "demo:anomaly:start": "python scripts/demo_start_anomaly.py",
+    "demo:anomaly:stop": "python scripts/demo_stop_anomaly.py"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0"
+  }
+}
