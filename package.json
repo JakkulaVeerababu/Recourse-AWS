@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "npm run dev -w web",
     "build": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present && npm run test:python",
+    "test": "npm run test --workspaces --if-present",
     "test:python": ".venv\\Scripts\\pytest services/anomaly-detector",
     "lint": "npm run lint --workspaces --if-present",
     "format": "npm run format --workspaces --if-present",

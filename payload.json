@@ -1,0 +1,26 @@
+{
+  "version": "0",
+  "id": "12345678-1234-1234-1234-123456789012",
+  "detail-type": "CloudWatch Alarm State Change",
+  "source": "aws.cloudwatch",
+  "account": "634005656298",
+  "time": "2026-09-18T11:23:00Z",
+  "region": "ap-south-1",
+  "resources": [
+    "arn:aws:cloudwatch:ap-south-1:634005656298:alarm:recourse-development-demo-processor-invocation-anomaly"
+  ],
+  "detail": {
+    "alarmName": "recourse-development-demo-processor-invocation-anomaly",
+    "state": {
+      "value": "ALARM",
+      "reason": "Threshold Crossed: 1 out of the last 1 datapoints [200.0] was greater than or equal to the threshold (120.0)"
+    },
+    "previousState": {
+      "value": "OK",
+      "reason": "Testing"
+    },
+    "configuration": {
+      "description": "Detects abnormal invocation volume for the Recourse demo processor workload. Threshold: 120 per 2 min."
+    }
+  }
+}

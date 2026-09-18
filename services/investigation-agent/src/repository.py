@@ -15,6 +15,14 @@ def generate_investigation_id(incident_id: str, evidence_id: str, model_version:
     name = f"{incident_id}:{evidence_id}:{model_version}"
     return f"INV-{str(uuid.uuid5(namespace, name))}"
 
+def get_investigation(incident_id: str, inv_id: str) -> bool:
+    try:
+        res = table.get_item(Key={'PK': f'INCIDENT#{incident_id}', 'SK': f'INVESTIGATION#{inv_id}'})
+        return 'Item' in res
+    except Exception as e:
+        logger.error(f"Error checking existing investigation: {e}")
+        return False
+
 def save_investigation(incident_id: str, context_id: str, evidence_id: str, result: InvestigationResult) -> str:
     inv_id = generate_investigation_id(incident_id, evidence_id, settings.PROMPT_VERSION)
     now = datetime.datetime.now(datetime.timezone.utc).isoformat()

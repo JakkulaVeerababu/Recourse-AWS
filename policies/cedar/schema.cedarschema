@@ -1,0 +1,48 @@
+namespace Recourse {
+    entity Agent;
+
+    entity AWSResource {
+        recourseManaged: Bool
+    };
+
+    type Context = {
+        incidentSeverity: String,
+        evidenceCompleteness: String,
+        signalScore: Long,
+        proposedRisk: String,
+        requiresHumanApproval: Bool,
+        targetMatchesIncident: Bool,
+        incidentStatus: String,
+        investigationStage: String
+    };
+
+    action "NO_ACTION" appliesTo {
+        principal: Agent,
+        resource: AWSResource,
+        context: Context
+    };
+
+    action "DISABLE_EVENT_SOURCE" appliesTo {
+        principal: Agent,
+        resource: AWSResource,
+        context: Context
+    };
+
+    action "REDUCE_INVOCATION_SOURCE" appliesTo {
+        principal: Agent,
+        resource: AWSResource,
+        context: Context
+    };
+
+    action "REVIEW_CONFIGURATION" appliesTo {
+        principal: Agent,
+        resource: AWSResource,
+        context: Context
+    };
+
+    action "MANUAL_INVESTIGATION" appliesTo {
+        principal: Agent,
+        resource: AWSResource,
+        context: Context
+    };
+}

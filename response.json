@@ -1,1 +1,1 @@
-{"status": "success", "incidentId": "INC-01M2Q54MQHTFHS7EGNK3WHNVHR", "note": "DUPLICATE_EVENT"}
+{"status": "ignored", "reason": "Missing metrics configuration in alarm"}

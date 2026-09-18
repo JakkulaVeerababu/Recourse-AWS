@@ -1,0 +1,8 @@
+[
+  {
+    "Source": "aws.cloudwatch",
+    "DetailType": "CloudWatch Alarm State Change",
+    "Detail": "{\"alarmName\":\"recourse-development-demo-processor-invocation-anomaly\",\"state\":{\"value\":\"ALARM\",\"reason\":\"Testing\"},\"previousState\":{\"value\":\"OK\",\"reason\":\"Testing\"}}",
+    "EventBusName": "default"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "uid": {
+      "type": "Recourse::Agent",
+      "id": "investigation-agent"
+    },
+    "attrs": {},
+    "parents": []
+  },
+  {
+    "uid": {
+      "type": "Recourse::AWSResource",
+      "id": "target"
+    },
+    "attrs": {
+      "recourseManaged": true
+    },
+    "parents": []
+  }
+]

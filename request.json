@@ -1,0 +1,15 @@
+{
+  "principal": "Recourse::Agent::\"investigation-agent\"",
+  "action": "Recourse::Action::\"DELETE_FUNCTION\"",
+  "resource": "Recourse::AWSResource::\"target\"",
+  "context": {
+    "incidentSeverity": "HIGH",
+    "evidenceCompleteness": "COMPLETE",
+    "signalScore": 40,
+    "proposedRisk": "LOW",
+    "requiresHumanApproval": true,
+    "targetMatchesIncident": true,
+    "incidentStatus": "INVESTIGATING",
+    "investigationStage": "AGENT_COMPLETE"
+  }
+}

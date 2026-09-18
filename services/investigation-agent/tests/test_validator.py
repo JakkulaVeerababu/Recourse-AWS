@@ -99,6 +99,70 @@ def test_validator_rejects_empty_citations():
     with pytest.raises(ValidationError):
         validate_investigation(result, {})
 
+def test_validator_array_path():
+    evidence = {
+        "summaryFacts": ["fact 1", "fact 2"]
+    }
+    result = InvestigationResult(
+        executiveSummary="Test",
+        hypotheses=[
+            Hypothesis(
+                hypothesisId="HYP-1",
+                title="T",
+                description="D",
+                likelihood="HIGH",
+                confidence=0.9,
+                supportingEvidence=["summaryFacts[0]"]
+            )
+        ],
+        contradictions=[],
+        unknowns=[],
+        proposedAction=ActionProposal(
+            actionType="NO_ACTION",
+            targetResource="none",
+            reason="test",
+            expectedEffect="test",
+            risk="LOW",
+            requiresHumanApproval=False
+        ),
+        modelConfidence=0.9
+    )
+    validated = validate_investigation(result, evidence)
+    assert "summaryFacts[0]" in validated.hypotheses[0].supportingEvidence
+
+def test_validator_rejects_bare_evidence_id():
+    evidence = {
+        "metricEvidence": {"invocations": True}
+    }
+    result = InvestigationResult(
+        executiveSummary="Test",
+        hypotheses=[
+            Hypothesis(
+                hypothesisId="HYP-1",
+                title="T",
+                description="D",
+                likelihood="HIGH",
+                confidence=0.9,
+                supportingEvidence=["evidenceId"]
+            )
+        ],
+        contradictions=[],
+        unknowns=[],
+        proposedAction=ActionProposal(
+            actionType="NO_ACTION",
+            targetResource="none",
+            reason="test",
+            expectedEffect="test",
+            risk="LOW",
+            requiresHumanApproval=False
+        ),
+        modelConfidence=0.9
+    )
+    
+    with pytest.raises(ValidationError, match="no valid supporting evidence"):
+        validate_investigation(result, evidence)
+
+
 def test_confidence_capping():
     result = InvestigationResult(
         executiveSummary="Test",

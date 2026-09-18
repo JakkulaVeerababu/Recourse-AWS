@@ -3,7 +3,7 @@ import logging
 from .config import settings
 from .agent import run_investigation
 from .validator import validate_investigation, ValidationError
-from .repository import save_investigation
+from .repository import save_investigation, get_investigation, generate_investigation_id
 from .tools import get_evidence
 
 logger = logging.getLogger(__name__)
@@ -28,6 +28,16 @@ def handle(event, context):
         raise ValueError("Missing required fields: incident_id, context_id, evidence_id")
         
     logger.info(f"Starting investigation for Incident: {incident_id}, Evidence: {evidence_id}")
+    
+    # Idempotency check before invoking Bedrock
+    expected_inv_id = generate_investigation_id(incident_id, evidence_id, settings.PROMPT_VERSION)
+    if get_investigation(incident_id, expected_inv_id):
+        logger.info(f"Deterministic investigation {expected_inv_id} already exists. Skipping Bedrock invocation.")
+        return {
+            'incident_id': incident_id,
+            'investigation_id': expected_inv_id,
+            'status': 'AGENT_COMPLETE'
+        }
     
     # Pre-fetch evidence to pass to validator
     evidence_payload = get_evidence(incident_id, evidence_id)

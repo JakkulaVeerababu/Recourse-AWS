@@ -3,7 +3,7 @@ from strands import Agent
 from strands.models import BedrockModel
 
 async def main():
-    model = BedrockModel(model_id="apac.anthropic.claude-3-7-sonnet-20250219-v1:0", region_name="ap-south-1")
+    model = BedrockModel(model_id="amazon.nova-pro-v1:0", region_name="us-east-1")
     agent = Agent(name="test", model=model)
     res = await agent.invoke_async("ping")
     print(res.content)

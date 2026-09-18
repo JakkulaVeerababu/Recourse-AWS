@@ -51,9 +51,7 @@ def validate_investigation(result: InvestigationResult, evidence: Dict[str, Any]
         hypothesis.supportingEvidence = valid_refs
                 
         if not hypothesis.supportingEvidence:
-            # If no supporting evidence remains, don't fail the pipeline, just append a generic one
-            logger.warning(f"Hypothesis {hypothesis.hypothesisId} has no valid supporting evidence after validation. Adding fallback.")
-            hypothesis.supportingEvidence = ["evidenceId"]
+            raise ValidationError(f"Hypothesis {hypothesis.hypothesisId} has no valid supporting evidence. You must cite exact paths from the provided JSON evidence schema (e.g. metricEvidence.invocations). Do not invent citations.")
 
     # 3. Deterministic Confidence Capping based on Completeness and Contradictions
     completeness = evidence.get('evidenceCompleteness', 'UNKNOWN')
