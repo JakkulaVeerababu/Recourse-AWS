@@ -19,3 +19,9 @@ def test_calculate_baseline_filters_breaches():
 def test_calculate_baseline_zero_values():
     values = [0, 0, 0]
     assert calculate_baseline(values) == 0.0
+
+def test_calculate_baseline_median_hardening():
+    values = [25, 25, 25, 25, 96]
+    # The 96 is a breach and filtered out. Leaving four 25s. Median of four 25s is 25.0
+    assert calculate_baseline(values) == 25.0
+

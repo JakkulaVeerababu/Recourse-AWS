@@ -19,3 +19,12 @@ def test_calculate_severity_high():
 def test_calculate_severity_critical():
     assert calculate_severity(10.0) == "CRITICAL"
     assert calculate_severity(100.0) == "CRITICAL"
+
+def test_calculate_severity_phase_3_proof():
+    # Prove: baseline = 25, observed = 140, deviation = 5.6, severity = HIGH
+    baseline = 25.0
+    observed = 140.0
+    deviation = observed / baseline
+    assert deviation == 5.6
+    assert calculate_severity(deviation) == "HIGH"
+

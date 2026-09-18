@@ -39,11 +39,16 @@ class CloudWatchMetrics:
 
 def calculate_baseline(values: list[float]) -> float | None:
     """
-    Calculates the average of the provided metric values.
+    Calculates the median of the provided metric values.
     Excludes any historical datapoints >= DETECTION_THRESHOLD.
     Requires at least MIN_BASELINE_PERIODS to return a valid baseline.
     """
+    import statistics
     valid_values = [v for v in values if v < DETECTION_THRESHOLD]
+    
+    # Use up to the last BASELINE_PERIODS valid periods
+    valid_values = valid_values[-BASELINE_PERIODS:]
+    
     if len(valid_values) < MIN_BASELINE_PERIODS:
         return None
-    return sum(valid_values) / len(valid_values)
+    return statistics.median(valid_values)

@@ -8,10 +8,14 @@ from src.repository import IncidentRepository
 from src.config import settings
 from src.id_generator import generate_incident_id, generate_event_id
 
+import os
+import boto3
+
 logger = logging.getLogger(__name__)
 logger.setLevel(getattr(logging, settings.LOG_LEVEL))
 
 repo = IncidentRepository()
+events_client = boto3.client('events')
 
 def handle(event: Dict[str, Any], context) -> Dict[str, Any]:
     logger.info(f"Received event: {json.dumps(event)}")
@@ -34,6 +38,37 @@ def handle(event: Dict[str, Any], context) -> Dict[str, Any]:
     else:
         logger.warning(f"Unknown event_type: {detection.event_type}")
         return {"status": "ignored", "reason": "UNKNOWN_EVENT_TYPE"}
+
+def _emit_incident_created(incident_id: str, detection: DetectionEvent):
+    event_bus_name = os.environ.get("EVENT_BUS_NAME")
+    if not event_bus_name:
+        logger.warning("EVENT_BUS_NAME not set, skipping INCIDENT_CREATED emission")
+        return
+        
+    payload = {
+        "event_type": "INCIDENT_CREATED",
+        "incident_id": incident_id,
+        "status": "DETECTED",
+        "resource_name": detection.resource_name,
+        "resource_type": detection.resource_type,
+        "severity": detection.severity,
+        "created_at": detection.detected_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    }
+    
+    try:
+        events_client.put_events(
+            Entries=[
+                {
+                    'Source': 'recourse.incidents',
+                    'DetailType': 'Recourse Incident Created',
+                    'Detail': json.dumps(payload),
+                    'EventBusName': event_bus_name
+                }
+            ]
+        )
+        logger.info(f"Emitted INCIDENT_CREATED for {incident_id}")
+    except Exception as e:
+        logger.error(f"Failed to emit INCIDENT_CREATED to EventBridge: {e}")
 
 def _handle_anomaly_detected(detection: DetectionEvent) -> Dict[str, Any]:
     idempotency_key = detection.event_id or detection.detection_id
@@ -97,6 +132,7 @@ def _handle_anomaly_detected(detection: DetectionEvent) -> Dict[str, Any]:
             return {"status": "success", "incidentId": existing_id, "note": "DUPLICATE_EVENT_CONCURRENT"}
             
         logger.info(f"Created incident {incident_id}")
+        _emit_incident_created(incident_id, detection)
         return {"status": "success", "incidentId": incident_id}
     except Exception as e:
         logger.error(f"Failed to create incident: {e}")

@@ -14,7 +14,7 @@ try:
         Overwrite=True
     )
     print("Controlled anomaly requested.")
-    print("Safety duration: 45 seconds.")
+    print("Safety duration: 120 seconds.")
     print("Invocation ceiling: 500.")
 except Exception as e:
     print(f"Error updating state: {e}")
