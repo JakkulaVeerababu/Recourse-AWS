@@ -81,6 +81,7 @@ class EvidencePackage:
     signalLevel: str
     generatedAt: str
     schemaVersion: str = "1.0"
+    resources: List[Dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

@@ -102,14 +102,20 @@ def handle(event, context):
         metricEvidence=metric_ev.to_dict() if hasattr(metric_ev, 'to_dict') else metric_ev.__dict__,
         configurationEvidence=config_ev.__dict__,
         logEvidence=log_ev.__dict__,
-        correlations=[c.__dict__ for c in correlations],
-        summaryFacts=[s.__dict__ for s in summary_facts],
+        correlations=[c.__dict__ if hasattr(c, '__dict__') else c for c in correlations],
+        summaryFacts=[s.__dict__ if hasattr(s, '__dict__') else s for s in summary_facts],
         signalScore=score,
         signalLevel=level,
-        generatedAt=datetime.now(timezone.utc).isoformat()
+        generatedAt=datetime.utcnow().isoformat() + "Z",
+        resources=[{
+            "resourceArn": ctx.get('resource', {}).get('arn', ''),
+            "resourceName": ctx.get('resource', {}).get('name', ''),
+            "resourceType": ctx.get('resource', {}).get('type', ''),
+            "tags": ctx.get('metadata', {}).get('tags', {})
+        }]
     )
 
-    # Let's fix nested dataclass serialization
+    # 4. Persist Evidence
     package_dict = package.to_dict()
     # Actually models.py MetricEvidence doesn't inherit dict, we used asdict via EvidencePackage.to_dict()
     

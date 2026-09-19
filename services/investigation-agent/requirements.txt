@@ -1,2 +1,9 @@
-pydantic>=2.0.0
-strands-agents>=1.50.0
+pydantic==2.13.0
+pydantic-core==2.46.0
+strands-agents==1.56.0
+mcp==2.1.1
+opentelemetry-api==1.44.0
+opentelemetry-sdk==1.44.0
+opentelemetry-instrumentation==0.65b0
+opentelemetry-instrumentation-threading==0.65b0
+opentelemetry-semantic-conventions==0.65b0

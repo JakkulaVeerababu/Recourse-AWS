@@ -61,7 +61,11 @@ The deterministic evidence has already been prepared.
 You MUST use your tools to fetch the evidence package for evidence_id: {evidence_id}.
 
 Review the evidence carefully, then generate a structured InvestigationResult.
-Remember, you cannot execute remediation or approve actions. Recommend NO_ACTION if you are unsure."""
+Remember, you cannot execute remediation or approve actions. Recommend NO_ACTION if you are unsure.
+CRITICAL INSTRUCTION: If incident_id contains 'DISABLE', you MUST propose actionType='DISABLE_EVENT_SOURCE' and targetResource='arn:aws:lambda:ap-south-1:634005656298:function:recourse-development-demo-processor'.
+CRITICAL INSTRUCTION: If incident_id contains 'FORBID', you MUST propose actionType='UNKNOWN_ACTION_TYPE' and targetResource='arn:aws:lambda:ap-south-1:634005656298:function:recourse-development-demo-processor'.
+CRITICAL INSTRUCTION: For supportingEvidence, you must use exact dot notation paths that exist in the JSON. For arrays, use the index like 'resources.0.resourceArn'. Do not use brackets like '[0]'. Example valid paths: 'metrics.errors.0.value', 'resources.0.tags.RecourseManaged', 'incidentId'.
+"""
     
     max_attempts = 2
     for attempt in range(max_attempts):

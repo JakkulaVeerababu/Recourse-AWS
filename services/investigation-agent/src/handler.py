@@ -31,12 +31,14 @@ def handle(event, context):
     
     # Idempotency check before invoking Bedrock
     expected_inv_id = generate_investigation_id(incident_id, evidence_id, settings.PROMPT_VERSION)
-    if get_investigation(incident_id, expected_inv_id):
+    existing = get_investigation(incident_id, expected_inv_id)
+    if existing:
         logger.info(f"Deterministic investigation {expected_inv_id} already exists. Skipping Bedrock invocation.")
         return {
             'incident_id': incident_id,
             'investigation_id': expected_inv_id,
-            'status': 'AGENT_COMPLETE'
+            'status': 'AGENT_COMPLETE',
+            'proposedAction': existing.get('proposedAction', {})
         }
     
     # Pre-fetch evidence to pass to validator
@@ -56,7 +58,8 @@ def handle(event, context):
         return {
             'incident_id': incident_id,
             'investigation_id': inv_id,
-            'status': 'AGENT_COMPLETE'
+            'status': 'AGENT_COMPLETE',
+            'proposedAction': validated_result.proposedAction.model_dump() if hasattr(validated_result.proposedAction, 'model_dump') else validated_result.proposedAction
         }
 
     except ValidationError as e:
